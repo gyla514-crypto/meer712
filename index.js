@@ -1,4 +1,3 @@
-index.js
 const express = require("express");
 const app = express();
 
@@ -8,19 +7,14 @@ app.post("/webhook", (req, res) => {
   console.log("收到事件:", JSON.stringify(req.body));
 
   if (req.body.events) {
-    req.body.events.forEach(event => {
-
+    req.body.events.forEach((event) => {
       if (event.type === "join") {
         console.log("BOT 被拉進群");
-
       }
 
       if (event.type === "message") {
         console.log("有人傳訊息");
-
-        // 這裡可以加防炸群邏輯
       }
-
     });
   }
 
