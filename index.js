@@ -30,26 +30,14 @@ app.post("/webhook", line.middleware(config), async (req, res) => {
 async function handleEvent(event) {
   console.log("收到事件:", JSON.stringify(event));
 
+  // 先不要在 join 事件做任何 reply / push
   if (event.type === "join") {
     console.log("BOT 被拉進群");
-
-    if (event.source && event.source.groupId) {
-      await client.pushMessage({
-        to: event.source.groupId,
-        messages: [
-          {
-            type: "text",
-            text: "✅ BOT 已加入群組，Webhook 正常運作中。"
-          }
-        ]
-      });
-    }
-
     return;
   }
 
   if (event.type === "message" && event.message.type === "text") {
-    console.log("有人傳訊息:", event.message.text);
+    console.log("收到文字訊息:", event.message.text);
 
     if (event.replyToken) {
       await client.replyMessage({
@@ -62,9 +50,10 @@ async function handleEvent(event) {
         ]
       });
     }
-
     return;
   }
+
+  return;
 }
 
 const PORT = process.env.PORT || 3000;
